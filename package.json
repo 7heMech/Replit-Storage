@@ -1,0 +1,26 @@
+{
+  "name": "replit-db",
+  "version": "1.0.0",
+  "description": "Client for the Replit Database",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "contributors": [
+    {
+      "name": "Mech",
+      "url": "https://github.com/7hemech"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/7heMech/Replit-Database.git"
+  },
+  "devDependencies": {
+    "jest": "^29.4.3"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.0"
+  }
+}
