@@ -9,7 +9,10 @@ const parseJson = (val) => {
 	}
 }
 
-const INVALID_URL = new Error('You must either pass a database URL into the Client constructor, or you must set the REPLIT_DB_URL environment variable. If you are using the repl.it editor, you must log in to get an auto-generated REPLIT_DB_URL environment variable.');
+const ERRORS = {
+	INVALID_URL: new Error('You must either pass a database URL into the Client constructor, or you must set the REPLIT_DB_URL environment variable. If you are using the repl.it editor, you must log in to get an auto-generated REPLIT_DB_URL environment variable.'),
+	INVALID_KEY: new Error('The type of a DB key must be string.'),
+};
 
 class Client {
 	#url;
@@ -20,7 +23,7 @@ class Client {
 	 */
 	constructor(url) {
 		this.#url = url || process.env.REPLIT_DB_URL;
-		if (!this.#url) throw INVALID_URL;
+		if (!this.#url || typeof this.#url !== 'string') throw ERRORS.INVALID_URL;
 
 		this.cache = {};
 		this.getAll({ fetch: true });
@@ -35,6 +38,7 @@ class Client {
 	 * @returns {*} - The value of the key.
 	 */
 	async get(key, config = {}) {
+		if (typeof key !== 'string') throw ERRORS.INVALID_KEY;
 		const { fetch = false, raw = false } = config;
 
 		let value;
@@ -55,6 +59,7 @@ class Client {
 	 * @param {any} value Value
 	 */
 	async set(key, value) {
+		if (typeof key !== 'string') throw ERRORS.INVALID_KEY;
 		const strValue = JSON.stringify(value);
 
 		this.cache[key] = strValue;
@@ -73,6 +78,8 @@ class Client {
 	 * @param {String} key Key
 	 */
 	async delete(key) {
+		if (typeof key !== 'string') throw ERRORS.INVALID_KEY;
+		
 		delete this.cache[key];
 		await dbFetch(`${this.#url}/${encodeURIComponent(key)}`, { method: 'DELETE' });
 		
