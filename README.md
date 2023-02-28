@@ -80,7 +80,7 @@ client.getAll({
 Sets multiple key/value pairs from an object. Returns Client.
 
 
-> `deleteMany(...String args)`
+> `deleteMany(Array keys)`
 
 Deletes multiple keys. Returns client.
 

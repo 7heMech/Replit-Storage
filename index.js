@@ -110,8 +110,7 @@ class Client {
 	 */
 	async empty() {
 		const keys = await this.list({ fetch: true });
-		for (let i = 0; i < keys.length; i++)
-			await this.delete(keys[i]);
+		await this.deleteMany(keys);
 
 		return this;
 	}
@@ -136,7 +135,7 @@ class Client {
 
 	/**
 	 * Sets many entries through an object.
-	 * @param {Object} obj The object.
+	 * @param {Object} obj An object containing key/value pairs to be set.
 	 */
 	async setMany(obj) {
 		for (const key in obj) await this.set(key, obj[key]);
@@ -146,11 +145,11 @@ class Client {
 
 	/**
 	 * Delete many entries by keys.
-	 * @param {Array<string>} args Keys
+	 * @param {Array<string>} keys List of keys to delete.
 	 */
-	async deleteMany(...args) {
-		for (let i = 0; i < args.length; i++)
-			await this.delete(args[i]);
+	async deleteMany(keys) {
+		for (let i = 0; i < keys.length; i++)
+			await this.delete(keys[i]);
 
 		return this;
 	}

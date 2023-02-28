@@ -64,15 +64,15 @@ declare class Client<T extends Record<string, unknown> = Record<string, unknown>
 
 	/** 
 	 * Sets many entries through an object. 
-	 * @param obj The object. 
+	 * @param {Object} obj An object containing key/value pairs to be set.
 	 */
 	public setMany(obj: Partial<T>): Promise<this>;
 
 	/** 
 	 * Delete many entries by keys.
-	 * @param args Keys
+	 * @param {Array<string>} keys List of keys to delete.
 	 */
-	public deleteMany(...args: (keyof T)[]): Promise<this>;
+	public deleteMany(keys: Array<(keyof T)[]>): Promise<this>;
 }
 
 export { Client };

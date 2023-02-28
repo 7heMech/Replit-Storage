@@ -74,7 +74,7 @@ test("delete values", async () => {
 	});
 
 	expect(await client.delete("deleteThis")).toEqual(client);
-	expect(await client.deleteMany("somethingElse", "andAnother")).toEqual(
+	expect(await client.deleteMany(["somethingElse", "andAnother"])).toEqual(
 		client
 	);
 	expect(await client.list()).toEqual(["key"]);
