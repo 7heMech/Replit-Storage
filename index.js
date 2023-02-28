@@ -111,6 +111,7 @@ class Client {
 	async empty() {
 		const keys = await this.list({ fetch: true });
 		await this.deleteMany(keys);
+		this.cache = {};
 
 		return this;
 	}
