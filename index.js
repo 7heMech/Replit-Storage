@@ -25,7 +25,8 @@ class Client {
 		if (!this.#url || typeof this.#url !== 'string') throw ERRORS.INVALID_URL;
 
 		this.cache = {};
-		this.getAll({ fetch: true });
+		this.init = false;
+		this.getAll({ fetch: true }).then(() => this.init = true);
 	}
 
 	/**
@@ -40,11 +41,9 @@ class Client {
 		if (typeof key !== 'string') throw ERRORS.INVALID_KEY;
 		const { fetch = false, raw = false } = config;
 
-		let value;
+		let value = this.cache[key];
 
-		if (!fetch) {
-			value = this.cache[key];
-		} else {
+		if (fetch || !this.init) {
 			value = await dbFetch(`${this.#url}/${encodeURIComponent(key)}`).then(res => res.text());
 			this.cache[key] = value;
 		}
@@ -89,12 +88,9 @@ class Client {
 	 * List keys starting with a prefix or list all.
 	 * @param {object} [config] - Configuration options.
 	 * @param {string} [config.prefix=''] Filter keys starting with prefix.
-	 * @param {boolean} [config.fetch=false] Fetches values from the database. Default is false.
 	 */
 	async list(config = {}) {
-		const { fetch = false, prefix = '' } = config;
-
-		if (!fetch) return Object.keys(this.cache).filter(key => key.startsWith(prefix));
+		const { prefix = '' } = config;
 
 		const text = await dbFetch(
 			`${this.#url}?encode=true&prefix=${encodeURIComponent(prefix)}`
@@ -109,7 +105,7 @@ class Client {
 	 * Clears the database.
 	 */
 	async empty() {
-		const keys = await this.list({ fetch: true });
+		const keys = await this.list();
 		await this.deleteMany(keys);
 		this.cache = {};
 
@@ -125,7 +121,7 @@ class Client {
 		const { fetch = false } = config;
 
 		const output = {};
-		const keys = await this.list({ fetch });
+		const keys = await this.list();
 		for (let i = 0; i < keys.length; i++) {
 			const key = keys[i];
 			output[key] = await this.get(key, { fetch });

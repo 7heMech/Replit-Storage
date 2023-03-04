@@ -43,7 +43,6 @@ declare class Client<T extends Record<string, unknown> = Record<string, unknown>
 	 * List keys starting with a prefix or list all.
 	 * @param {object} [config] - Configuration options.
 	 * @param {string} [config.prefix=''] Filter keys starting with prefix.
-	 * @param {boolean} [config.fetch=false] Fetches values from the database. Default is false.
 	 */
 	public list(config?: {
 		fetch?: boolean,

@@ -53,7 +53,6 @@ Lists all of the keys, or all of the keys starting with `prefix` if specifed.
 
 ```js
 client.list({
-	fetch: false,
 	prefix: "",
 });
 ```
