@@ -25,8 +25,6 @@ class Client {
 		if (!this.#url || typeof this.#url !== 'string') throw ERRORS.INVALID_URL;
 
 		this.cache = {};
-		this.init = false;
-		this.getAll({ fetch: true }).then(() => this.init = true);
 	}
 
 	/**
@@ -43,7 +41,7 @@ class Client {
 
 		let value = this.cache[key];
 
-		if (fetch || !this.init) {
+		if (fetch || typeof this.value === 'undefined') {
 			value = await dbFetch(`${this.#url}/${encodeURIComponent(key)}`).then(res => res.text());
 			this.cache[key] = value;
 		}
@@ -114,17 +112,13 @@ class Client {
 
 	/**
 	 * Get all key/value pairs and return as an object.
-	 * @param {object} [config] - Configuration options.
-	 * @param {boolean} [config.fetch=false] If true, fetches values from the database. Default is false.
 	 */
-	async getAll(config = {}) {
-		const { fetch = false } = config;
-
+	async getAll() {
 		const output = {};
 		const keys = await this.list();
 		for (let i = 0; i < keys.length; i++) {
 			const key = keys[i];
-			output[key] = await this.get(key, { fetch });
+			output[key] = await this.get(key, { fetch: true });
 		}
 
 		return output;

@@ -54,12 +54,8 @@ declare class Client<T extends Record<string, unknown> = Record<string, unknown>
 
 	/**
 	 * Get all key/value pairs and return as an object.
-	 * @param {object} [config] - Configuration options.
-	 * @param {boolean} [config.fetch=false] If true, fetches values from the database. Default is false.
 	 */
-	public getAll(config?: {
-		fetch?: boolean
-	}): Promise<T>;
+	public getAll(): Promise<T>;
 
 	/** 
 	 * Sets many entries through an object. 

@@ -31,7 +31,7 @@ Gets a value. Returns Promise.
 
 ```js
 client.get("key", {
-	fetch: false,
+	fetch: false, // Skips check if it exists in cache
 	raw: false,
 });
 ```
@@ -52,9 +52,7 @@ Deletes a key. Returns Client.
 Lists all of the keys, or all of the keys starting with `prefix` if specifed.
 
 ```js
-client.list({
-	prefix: "",
-});
+client.list({ prefix: "" });
 ```
 
 
@@ -63,15 +61,9 @@ client.list({
 Clears the database. Returns Client
 
 
-> `getAll(Object config?)`
+> `getAll()`
 
 Get all key/value pairs and return as an object.
-
-```js
-client.getAll({ 
-	fetch: false,
-});
-```
 
 
 > `setMany(Object obj)`
