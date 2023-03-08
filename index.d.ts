@@ -10,7 +10,6 @@ declare class Client<T extends Record<string, unknown> = Record<string, unknown>
 	 * @param {string} key - The key to retrieve.
 	 * @param {object} [config] - Configuration options.
 	 * @param {boolean} [config.raw=false] - If true, returns the raw string value instead of parsing it.
-	 * @param {boolean} [config.fetch=false] - If true, fetches the value from the database.
 	 * @returns {*} - The value of the key.
 	 */
 	public get(key: keyof T, config: {
@@ -22,8 +21,7 @@ declare class Client<T extends Record<string, unknown> = Record<string, unknown>
 	}): Promise<T[K]>;
 
 	public get<K extends keyof T>(key: K, config?: {
-		raw?: boolean,
-		fetch?: boolean
+		raw?: boolean
 	}): Promise<T[K] | string>;
 
 	/** 
@@ -45,7 +43,6 @@ declare class Client<T extends Record<string, unknown> = Record<string, unknown>
 	 * @param {string} [config.prefix=''] Filter keys starting with prefix.
 	 */
 	public list(config?: {
-		fetch?: boolean,
 		prefix?: string
 	}): Promise<(keyof T)[]>;
 

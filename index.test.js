@@ -1,11 +1,9 @@
 const { Client } = require("./index");
 
-let client, fetchClient;
+let client;
 
 beforeAll(async () => {
 	client = new Client();
-	fetchClient = new Client();
-
 	await client.empty();
 });
 
@@ -43,16 +41,6 @@ test("gets a value", async () => {
 	});
 
 	expect(await client.getAll()).toEqual({
-		key: "value"
-	});
-});
-
-test("fetches a value", async () => {
-	await client.setMany({
-		key: "value",
-	});
-
-	expect(await fetchClient.getAll({ fetch: true })).toEqual({
 		key: "value"
 	});
 });

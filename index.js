@@ -32,16 +32,14 @@ class Client {
 	 * @param {string} key - The key to retrieve.
 	 * @param {object} [config] - Configuration options.
 	 * @param {boolean} [config.raw=false] - If true, returns the raw string value instead of parsing it.
-	 * @param {boolean} [config.fetch=false] - If true, fetches the value from the database.
 	 * @returns {*} - The value of the key.
 	 */
 	async get(key, config = {}) {
 		if (typeof key !== 'string') throw ERRORS.INVALID_KEY;
-		const { fetch = false, raw = false } = config;
+		const { raw = false } = config;
 
 		let value = this.cache[key];
-
-		if (fetch || typeof this.value === 'undefined') {
+		if (typeof this.value === 'undefined') {
 			value = await dbFetch(`${this.#url}/${encodeURIComponent(key)}`).then(res => res.text());
 			this.cache[key] = value;
 		}
@@ -118,7 +116,7 @@ class Client {
 		const keys = await this.list();
 		for (let i = 0; i < keys.length; i++) {
 			const key = keys[i];
-			output[key] = await this.get(key, { fetch: true });
+			output[key] = await this.get(key);
 		}
 
 		return output;
