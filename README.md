@@ -30,10 +30,7 @@ These are the methods which a client instance provides.
 Gets a value. Returns Promise.
 
 ```js
-client.get("key", {
-	fetch: false, // Skips check if it exists in cache
-	raw: false,
-});
+client.get("key", { raw: false });
 ```
 
 
