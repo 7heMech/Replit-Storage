@@ -7,9 +7,9 @@ declare class Client<T extends Record<string, unknown> = Record<string, unknown>
 
 	/**
 	 * Retrieves a value from the cache or the database.
-	 * @param {string} key - The key to retrieve.
-	 * @param {object} [config] - Configuration options.
-	 * @param {boolean} [config.raw=false] - If true, returns the raw string value instead of parsing it.
+	 * @param {String} key - The key to retrieve.
+	 * @param {Object} [config] - Configuration options.
+	 * @param {Boolean} [config.raw=false] - If true, returns the raw string value instead of parsing it.
 	 * @returns {*} - The value of the key.
 	 */
 	public get(key: keyof T, config: {
@@ -39,8 +39,8 @@ declare class Client<T extends Record<string, unknown> = Record<string, unknown>
 
 	/**
 	 * List keys starting with a prefix or list all.
-	 * @param {object} [config] - Configuration options.
-	 * @param {string} [config.prefix=''] Filter keys starting with prefix.
+	 * @param {Object} [config] - Configuration options.
+	 * @param {String} [config.prefix=''] Filter keys starting with prefix.
 	 */
 	public list(config?: {
 		prefix?: string

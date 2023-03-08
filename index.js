@@ -23,15 +23,15 @@ class Client {
 	constructor(url) {
 		this.#url = url || process.env.REPLIT_DB_URL;
 		if (!this.#url || typeof this.#url !== 'string') throw ERRORS.INVALID_URL;
-		
+
 		this.cache = {};
 	}
 
 	/**
 	 * Retrieves a value from the cache or the database.
-	 * @param {string} key - The key to retrieve.
-	 * @param {object} [config] - Configuration options.
-	 * @param {boolean} [config.raw=false] - If true, returns the raw string value instead of parsing it.
+	 * @param {String} key - The key to retrieve.
+	 * @param {Object} [config] - Configuration options.
+	 * @param {Boolean} [config.raw=false] - If true, returns the raw string value instead of parsing it.
 	 * @returns {*} - The value of the key.
 	 */
 	async get(key, config = {}) {
@@ -49,7 +49,7 @@ class Client {
 
 	/**
 	 * Sets a key
-	 * @param {string} key Key
+	 * @param {String} key Key
 	 * @param {any} value Value
 	 */
 	async set(key, value) {
@@ -78,8 +78,8 @@ class Client {
 
 	/**
 	 * List keys starting with a prefix or list all.
-	 * @param {object} [config] - Configuration options.
-	 * @param {string} [config.prefix=''] Filter keys starting with prefix.
+	 * @param {Object} [config] - Configuration options.
+	 * @param {String} [config.prefix=''] Filter keys starting with prefix.
 	 */
 	async list(config = {}) {
 		const { prefix = '' } = config;
@@ -89,7 +89,7 @@ class Client {
 		).then(res => res.text());
 
 		if (text.length === 0) return [];
-		
+
 		return text.split('\n').map(decodeURIComponent);
 	}
 
