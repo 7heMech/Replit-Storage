@@ -23,7 +23,7 @@ class Client {
 	constructor(url) {
 		this.#url = url || process.env.REPLIT_DB_URL;
 		if (!this.#url || typeof this.#url !== 'string') throw ERRORS.INVALID_URL;
-
+		
 		this.cache = {};
 	}
 
@@ -89,7 +89,7 @@ class Client {
 		).then(res => res.text());
 
 		if (text.length === 0) return [];
-
+		
 		return text.split('\n').map(decodeURIComponent);
 	}
 

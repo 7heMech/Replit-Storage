@@ -18,4 +18,4 @@ const agent = new https.Agent({
 });
 
 module.exports = (url, options) =>
-	rawFetch(url, typeof options === 'object' ? { agent, ...options } : { agent });
+	rawFetch(url, typeof options === 'object' ? { ...options, agent } : { agent });
