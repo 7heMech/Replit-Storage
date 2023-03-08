@@ -16,14 +16,19 @@ test("create a client", async () => {
 	expect(typeof client.cache).toBe("object");
 });
 
-test("sets a value", async () => {
-	expect(await client.set("key", "value")).toEqual(client);
-	expect(await client.setMany({
+test("sets and gets values", async () => {
+	await client.set("key", "value");
+	expect(await client.getAll()).toEqual({
 		key: "value",
-		second: "secondThing"
-	})).toEqual(
-		client
-	);
+	});
+	await client.setMany({
+		key: "val",
+		second: "secondThing",
+	});
+	expect(await client.getAll()).toEqual({
+		key: "val",
+    second: "secondThing"
+	});
 });
 
 test("list keys", async () => {
@@ -33,16 +38,6 @@ test("list keys", async () => {
 	});
 
 	expect(await client.list()).toEqual(["key", "second"]);
-});
-
-test("gets a value", async () => {
-	await client.setMany({
-		key: "value",
-	});
-
-	expect(await client.getAll()).toEqual({
-		key: "value"
-	});
 });
 
 test("key and value with newline", async () => {
@@ -61,29 +56,21 @@ test("delete values", async () => {
 		andAnother: "again same thing",
 	});
 
-	expect(await client.delete("deleteThis")).toEqual(client);
-	expect(await client.deleteMany(["somethingElse", "andAnother"])).toEqual(
-		client
-	);
+	await client.delete("deleteThis")
+	await client.deleteMany(["somethingElse", "andAnother"])
 	expect(await client.list()).toEqual(["key"]);
-	expect(await client.empty()).toEqual(client);
+	await client.empty()
 	expect(await client.list()).toEqual([]);
 });
 
 test("ensure that we escape values when setting", async () => {
-	expect(await client.set("a", "1;b=2")).toEqual(client);
+	await client.set("a", "1;b=2");
 	expect(await client.list()).toEqual(["a"]);
 	expect(await client.get("a")).toEqual("1;b=2");
 });
 
-test("ensure that we escape values when deleting", async () => {
-	expect(await client.set("a", "1;b=2")).toEqual(client);
-	expect(await client.delete("a")).toEqual(client);
-	expect(await client.list()).toEqual([]);
-});
-
 test("ensure that we escape values when emptying", async () => {
-	expect(await client.set("a", "1;b=2")).toEqual(client);
-	expect(await client.empty()).toEqual(client);
+	await client.set("a", "1;b=2");
+	await client.empty();
 	expect(await client.list()).toEqual([]);
 });

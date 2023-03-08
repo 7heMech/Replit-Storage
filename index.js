@@ -63,8 +63,6 @@ class Client {
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			body: `${encodeURIComponent(key)}=${encodeURIComponent(strValue)}`,
 		});
-
-		return this;
 	}
 
 	/**
@@ -76,8 +74,6 @@ class Client {
 
 		delete this.cache[key];
 		await dbFetch(`${this.#url}/${encodeURIComponent(key)}`, { method: 'DELETE' });
-
-		return this;
 	}
 
 	/**
@@ -104,8 +100,6 @@ class Client {
 		const keys = await this.list();
 		await this.deleteMany(keys);
 		this.cache = {};
-
-		return this;
 	}
 
 	/**
@@ -128,8 +122,6 @@ class Client {
 	 */
 	async setMany(obj) {
 		for (const key in obj) await this.set(key, obj[key]);
-
-		return this;
 	}
 
 	/**
@@ -139,8 +131,6 @@ class Client {
 	async deleteMany(keys) {
 		for (let i = 0; i < keys.length; i++)
 			await this.delete(keys[i]);
-
-		return this;
 	}
 }
 

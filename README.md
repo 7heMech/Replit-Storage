@@ -27,7 +27,7 @@ These are the methods which a client instance provides.
 
 > `get(String key, Object config?)`
 
-Gets a value. Returns Promise.
+Gets a value.
 
 ```js
 client.get("key", { raw: false });
@@ -36,12 +36,12 @@ client.get("key", { raw: false });
 
 > `set(String key, Any value)`
 
-Sets a key to a value. Returns Client. 
+Sets a key to a value.
 
 
 > `delete(String key)`
 
-Deletes a key. Returns Client.
+Deletes a key.
 
 
 > `list(Object config?)`
@@ -55,7 +55,7 @@ client.list({ prefix: "" });
 
 > `empty()`
 
-Clears the database. Returns Client
+Clears the database.
 
 
 > `getAll()`
@@ -65,12 +65,12 @@ Get all key/value pairs and return as an object.
 
 > `setMany(Object obj)`
 
-Sets multiple key/value pairs from an object. Returns Client.
+Sets multiple key/value pairs from an object.
 
 
 > `deleteMany(Array keys)`
 
-Deletes multiple keys. Returns client.
+Deletes multiple keys.
 
 
 ## Tests

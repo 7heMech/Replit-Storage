@@ -29,13 +29,13 @@ declare class Client<T extends Record<string, unknown> = Record<string, unknown>
 	 * @param key Key 
 	 * @param value Value 
 	 */
-	public set<K extends keyof T>(key: K, value: T[K]): Promise<this>;
+	public set<K extends keyof T>(key: K, value: T[K]): Promise<void>;
 
 	/** 
 	 * Deletes a key 
 	 * @param key Key 
 	 */
-	public delete(key: keyof T): Promise<this>;
+	public delete(key: keyof T): Promise<void>;
 
 	/**
 	 * List keys starting with a prefix or list all.
@@ -47,7 +47,7 @@ declare class Client<T extends Record<string, unknown> = Record<string, unknown>
 	}): Promise<(keyof T)[]>;
 
 	/** Clears the database. */
-	public empty(): Promise<this>;
+	public empty(): Promise<void>;
 
 	/**
 	 * Get all key/value pairs and return as an object.
@@ -58,13 +58,13 @@ declare class Client<T extends Record<string, unknown> = Record<string, unknown>
 	 * Sets many entries through an object. 
 	 * @param {Object} obj An object containing key/value pairs to be set.
 	 */
-	public setMany(obj: Partial<T>): Promise<this>;
+	public setMany(obj: Partial<T>): Promise<void>;
 
 	/** 
 	 * Delete many entries by keys.
 	 * @param {Array<string>} keys List of keys to delete.
 	 */
-	public deleteMany(keys: Array<(keyof T)[]>): Promise<this>;
+	public deleteMany(keys: Array<(keyof T)[]>): Promise<void>;
 }
 
 export { Client };
