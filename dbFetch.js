@@ -1,6 +1,6 @@
 let rawFetch;
 
-if (fetch) {
+if (typeof fetch != 'undefined') {
 	const { emitWarning } = process;
 
 	process.emitWarning = (warning, ...args) => {
