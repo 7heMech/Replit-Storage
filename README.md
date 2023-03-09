@@ -1,4 +1,4 @@
-[![npm version](https://badge.fury.io/js/replit-db.svg)](https://badge.fury.io/js/replit-db)
+[![npm version](https://badge.fury.io/js/replit-storage.svg)](https://badge.fury.io/js/replit-storage)
 
 [![Run on Repl.it](https://repl.it/badge/github/7heMech/Replit-Database)](https://repl.it/github/7heMech/Replit-Database)
 
