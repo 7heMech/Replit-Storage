@@ -7,7 +7,7 @@ Replit DB client is a simple way to use Replit's Database in your Node.js repls.
 
 ## Get started
 ```js
-const { Client } = require("replit-store");
+const { Client } = require("replit-storage");
 const client = new Client();
 
 client.set("key", "value").then(async () => {
