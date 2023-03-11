@@ -1,5 +1,4 @@
 let rawFetch;
-
 if (typeof fetch != 'undefined') {
 	const { emitWarning } = process;
 

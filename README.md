@@ -1,9 +1,9 @@
 [![npm version](https://badge.fury.io/js/replit-storage.svg)](https://badge.fury.io/js/replit-storage)
 
-[![Run on Repl.it](https://repl.it/badge/github/7heMech/Replit-Database)](https://repl.it/github/7heMech/Replit-Database)
+[![Run on Repl.it](https://repl.it/badge/github/7heMech/Replit-Storage)](https://repl.it/github/7heMech/Replit-Storage)
 
-# Replit DB client
-Replit DB client is a simple way to use Replit's Database in your Node.js repls.
+# Replit Storage
+Replit Storage is a simple way to use the Replit Database in your Node.js repls.
 
 ## Get started
 ```js
