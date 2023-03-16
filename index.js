@@ -97,9 +97,10 @@ class Client {
 	 * Clears the database.
 	 */
 	async empty() {
+		this.cache = {};
+		
 		const keys = await this.list();
 		await this.deleteMany(keys);
-		this.cache = {};
 	}
 
 	/**
