@@ -1,4 +1,4 @@
-const dbFetch = require("./dbFetch");
+const req = require("./req");
 
 const parseJson = (val) => {
 	try {
@@ -40,7 +40,7 @@ class Client {
 
 		let value = this.cache[key];
 		if (typeof this.value === 'undefined') {
-			value = await dbFetch(`${this.#url}/${encodeURIComponent(key)}`).then(res => res.text());
+			value = await req(`${this.#url}/${encodeURIComponent(key)}`).then(res => res.text());
 			this.cache[key] = value;
 		}
 
@@ -58,7 +58,7 @@ class Client {
 
 		this.cache[key] = strValue;
 
-		await dbFetch(this.#url, {
+		await req(this.#url, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			body: `${encodeURIComponent(key)}=${encodeURIComponent(strValue)}`,
@@ -73,7 +73,7 @@ class Client {
 		if (typeof key !== 'string') throw ERRORS.INVALID_KEY;
 
 		delete this.cache[key];
-		await dbFetch(`${this.#url}/${encodeURIComponent(key)}`, { method: 'DELETE' });
+		await req(`${this.#url}/${encodeURIComponent(key)}`, { method: 'DELETE' });
 	}
 
 	/**
@@ -84,7 +84,7 @@ class Client {
 	async list(config = {}) {
 		const { prefix = '' } = config;
 
-		const text = await dbFetch(
+		const text = await req(
 			`${this.#url}?encode=true&prefix=${encodeURIComponent(prefix)}`
 		).then(res => res.text());
 

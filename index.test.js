@@ -27,7 +27,7 @@ test("sets and gets values", async () => {
 	});
 	expect(await client.getAll()).toEqual({
 		key: "val",
-    second: "secondThing"
+		second: "secondThing"
 	});
 });
 
@@ -64,13 +64,13 @@ test("delete values", async () => {
 });
 
 test("ensure that we escape values when setting", async () => {
-	await client.set("a", "1;b=2");
+	await client.set("https://example.com/", "1;b=2");
 	expect(await client.list()).toEqual(["a"]);
-	expect(await client.get("a")).toEqual("1;b=2");
+	expect(await client.get("https://example.com/")).toEqual("1;b=2");
 });
 
 test("ensure that we escape values when emptying", async () => {
-	await client.set("a", "1;b=2");
+	await client.set("https://example.com/", "1;b=2");
 	await client.empty();
 	expect(await client.list()).toEqual([]);
 });
