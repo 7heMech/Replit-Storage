@@ -65,7 +65,7 @@ test("delete values", async () => {
 
 test("ensure that we escape values when setting", async () => {
 	await client.set("https://example.com/", "1;b=2");
-	expect(await client.list()).toEqual(["a"]);
+	expect(await client.list()).toEqual(["https://example.com/"]);
 	expect(await client.get("https://example.com/")).toEqual("1;b=2");
 });
 
