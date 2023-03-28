@@ -6,6 +6,5 @@ replit.nix
 .upm
 .config
 .cache
-LICENSE
 package-lock.json
 node_modules
