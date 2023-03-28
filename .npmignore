@@ -1,9 +1,11 @@
 # For uploading to npm ignoring unnecessary files
+*.test.js
 .git
 .replit
 replit.nix
 .upm
 .config
 .cache
+LICENSE
 package-lock.json
 node_modules
