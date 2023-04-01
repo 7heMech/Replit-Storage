@@ -9,7 +9,8 @@ const parseJson = (val) => {
 }
 
 const ERRORS = {
-	INVALID_KEY: new Error('Type of key is invalid.'),
+	NOT_STRING: new Error('The type of a DB key must be string.'),
+	NOT_OBJECT: new Error('Invalid parameter passed to set method, type must be object.'),
 };
 
 class Client {
@@ -32,7 +33,7 @@ class Client {
 	 * @returns {*} - The value of the key.
 	 */
 	async get(key, config = {}) {
-		if (typeof key !== 'string') throw ERRORS.INVALID_KEY;
+		if (typeof key !== 'string') throw ERRORS.NOT_STRING;
 		const { raw = false } = config;
 
 		let value = this.cache[key];
@@ -49,13 +50,12 @@ class Client {
 	 * @param {Object} entries An object containing key/value pairs to be set.
 	 */
 	async set(entries) {
-		if (typeof entries !== 'object') throw ERRORS.INVALID_KEY;
+		if (typeof entries !== 'object') throw ERRORS.NOT_OBJECT;
 
 		const body = new URLSearchParams();
-		
 		for (const key in entries) {
 			const value = JSON.stringify(entries[key]);
-			
+
 			this.cache[key] = value;
 			body.append(key, value);
 		}
@@ -72,7 +72,7 @@ class Client {
 	 * @param {String} key Key
 	 */
 	async delete(key) {
-		if (typeof key !== 'string') throw ERRORS.INVALID_KEY;
+		if (typeof key !== 'string') throw ERRORS.NOT_STRING;
 
 		delete this.cache[key];
 		await fetch(new URL(key, this.#url), { method: 'DELETE' });
@@ -88,12 +88,11 @@ class Client {
 
 		const url = new URL(this.#url);
 		url.search = new URLSearchParams({
-    	encode: true,
-    	prefix,
+			encode: true,
+			prefix,
 		});
 
 		const text = await fetch(url).then(res => res.text());
-
 		if (text.length === 0) return [];
 
 		return text.split('\n').map(decodeURIComponent);

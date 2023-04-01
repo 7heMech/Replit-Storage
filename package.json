@@ -4,7 +4,7 @@
   "description": "Client for the Replit Database.",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_OPTIONS=\"--experimental-vm-modules --trace-warnings\" jest"
+    "test": "jest"
   },
   "contributors": [
     {
