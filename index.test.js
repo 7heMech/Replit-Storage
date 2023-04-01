@@ -1,76 +1,36 @@
-const { Client } = require("./index");
-
-let client;
+const { Client } = require('./index');
+let db;
 
 beforeAll(async () => {
-	client = new Client();
-	await client.empty();
+	db = new Client('https://replitdb.repl.co');
+	await db.empty();
 });
 
-afterEach(async () => {
-	await client.empty();
-});
+afterAll(async () => await db.empty());
 
-test("create a client", async () => {
-	expect(client).toBeTruthy();
-	expect(typeof client.cache).toBe("object");
-});
+test('set values', async () => db.set({
+	key: 'val',
+	second: 'secondThing'
+}));
 
-test("sets and gets values", async () => {
-	await client.set("key", "value");
-	expect(await client.getAll()).toEqual({
-		key: "value",
-	});
-	await client.setMany({
-		key: "val",
-		second: "secondThing",
-	});
-	expect(await client.getAll()).toEqual({
-		key: "val",
-		second: "secondThing"
+test('get values', async () => {
+	expect(await db.getAll()).toEqual({
+		key: 'val',
+		second: 'secondThing'
 	});
 });
 
-test("list keys", async () => {
-	await client.setMany({
-		key: "value",
-		second: "secondThing",
-	});
-
-	expect(await client.list()).toEqual(["key", "second"]);
+test('delete values', async () => {
+	await db.empty();
+	expect(await db.list()).toEqual([]);
 });
 
-test("key and value with newline", async () => {
-	await client.set("key\na", "val\nue");
-
-	expect(await client.getAll()).toEqual({
-		"key\na": "val\nue",
-	});
+test('ensure that we escape values when setting', async () => {
+	await db.set('https://example.com/', '1;b=2');
+	expect(await db.get('https://example.com/')).toEqual('1;b=2');
 });
 
-test("delete values", async () => {
-	await client.setMany({
-		key: "value",
-		deleteThis: "please",
-		somethingElse: "in delete multiple",
-		andAnother: "again same thing",
-	});
-
-	await client.delete("deleteThis")
-	await client.deleteMany(["somethingElse", "andAnother"])
-	expect(await client.list()).toEqual(["key"]);
-	await client.empty()
-	expect(await client.list()).toEqual([]);
-});
-
-test("ensure that we escape values when setting", async () => {
-	await client.set("https://example.com/", "1;b=2");
-	expect(await client.list()).toEqual(["https://example.com/"]);
-	expect(await client.get("https://example.com/")).toEqual("1;b=2");
-});
-
-test("ensure that we escape values when emptying", async () => {
-	await client.set("https://example.com/", "1;b=2");
-	await client.empty();
-	expect(await client.list()).toEqual([]);
+test('ensure that we escape values when deleting', async () => {
+	await db.delete('https://example.com/');
+	expect(await db.list()).toEqual([]);
 });

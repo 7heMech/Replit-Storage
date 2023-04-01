@@ -9,8 +9,7 @@ const parseJson = (val) => {
 }
 
 const ERRORS = {
-	INVALID_KEY: new Error('The type of a DB key must be string.'),
-	INVALID_URL: new Error('You must either pass a database URL into the Client constructor, or you must set the REPLIT_DB_URL environment variable. If you are using the repl.it editor, you must log in to get an auto-generated REPLIT_DB_URL environment variable.'),
+	INVALID_KEY: new Error('Type of key is invalid.'),
 };
 
 class Client {
@@ -21,9 +20,7 @@ class Client {
 	 * @param {String} url Custom database URL
 	 */
 	constructor(url) {
-		this.#url = url || process.env.REPLIT_DB_URL;
-		if (!this.#url || typeof this.#url !== 'string') throw ERRORS.INVALID_URL;
-
+		this.#url = new URL(url || process.env.REPLIT_DB_URL);
 		this.cache = {};
 	}
 
@@ -39,8 +36,8 @@ class Client {
 		const { raw = false } = config;
 
 		let value = this.cache[key];
-		if (typeof this.value === 'undefined') {
-			value = await fetch(`${this.#url}/${encodeURIComponent(key)}`).then(res => res.text());
+		if (typeof value === 'undefined') {
+			value = await fetch(new URL(key, this.#url)).then(res => res.text());
 			this.cache[key] = value;
 		}
 
@@ -48,20 +45,25 @@ class Client {
 	}
 
 	/**
-	 * Sets a key
-	 * @param {String} key Key
-	 * @param {any} value Value
+	 * Sets entries through an object.
+	 * @param {Object} entries An object containing key/value pairs to be set.
 	 */
-	async set(key, value) {
-		if (typeof key !== 'string') throw ERRORS.INVALID_KEY;
-		const strValue = JSON.stringify(value);
+	async set(entries) {
+		if (typeof entries !== 'object') throw ERRORS.INVALID_KEY;
 
-		this.cache[key] = strValue;
+		const body = new URLSearchParams();
+		
+		for (const key in entries) {
+			const value = JSON.stringify(entries[key]);
+			
+			this.cache[key] = value;
+			body.append(key, value);
+		}
 
 		await fetch(this.#url, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-			body: `${encodeURIComponent(key)}=${encodeURIComponent(strValue)}`,
+			body,
 		});
 	}
 
@@ -73,7 +75,7 @@ class Client {
 		if (typeof key !== 'string') throw ERRORS.INVALID_KEY;
 
 		delete this.cache[key];
-		await fetch(`${this.#url}/${encodeURIComponent(key)}`, { method: 'DELETE' });
+		await fetch(new URL(key, this.#url), { method: 'DELETE' });
 	}
 
 	/**
@@ -84,9 +86,13 @@ class Client {
 	async list(config = {}) {
 		const { prefix = '' } = config;
 
-		const text = await fetch(
-			`${this.#url}?encode=true&prefix=${encodeURIComponent(prefix)}`
-		).then(res => res.text());
+		const url = new URL(this.#url);
+		url.search = new URLSearchParams({
+    	encode: true,
+    	prefix,
+		});
+
+		const text = await fetch(url).then(res => res.text());
 
 		if (text.length === 0) return [];
 
@@ -115,14 +121,6 @@ class Client {
 		}
 
 		return output;
-	}
-
-	/**
-	 * Sets many entries through an object.
-	 * @param {Object} obj An object containing key/value pairs to be set.
-	 */
-	async setMany(obj) {
-		for (const key in obj) await this.set(key, obj[key]);
 	}
 
 	/**
