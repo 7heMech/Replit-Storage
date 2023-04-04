@@ -38,7 +38,7 @@ class Client {
 
 		let value = this.cache[key];
 		if (typeof value === 'undefined') {
-			value = await fetch(new URL(key, this.#url)).then(res => res.text());
+			value = await fetch(`${this.#url}/${encodeURIComponent(key)}`).then(res => res.text());
 			this.cache[key] = value;
 		}
 
@@ -75,7 +75,7 @@ class Client {
 		if (typeof key !== 'string') throw ERRORS.NOT_STRING;
 
 		delete this.cache[key];
-		await fetch(new URL(key, this.#url), { method: 'DELETE' });
+		await fetch(`${this.#url}/${encodeURIComponent(key)}`, { method: 'DELETE' });
 	}
 
 	/**
@@ -86,13 +86,12 @@ class Client {
 	async list(config = {}) {
 		const { prefix = '' } = config;
 
-		const url = new URL(this.#url);
-		url.search = new URLSearchParams({
+		const query = new URLSearchParams({
 			encode: true,
 			prefix,
 		});
 
-		const text = await fetch(url).then(res => res.text());
+		const text = await fetch(`${this.#url}?${query}}`).then(res => res.text());
 		if (text.length === 0) return [];
 
 		return text.split('\n').map(decodeURIComponent);
