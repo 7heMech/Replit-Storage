@@ -91,7 +91,7 @@ class Client {
 			prefix,
 		});
 
-		const text = await fetch(`${this.#url}?${query}}`).then(res => res.text());
+		const text = await fetch(`${this.#url}?${query}`).then(res => res.text());
 		if (text.length === 0) return [];
 
 		return text.split('\n').map(decodeURIComponent);
