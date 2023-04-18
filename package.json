@@ -17,9 +17,6 @@
     "type": "git",
     "url": "https://github.com/7heMech/Replit-Database.git"
   },
-  "devDependencies": {
-    "jest": "^29.4.3"
-  },
   "dependencies": {
     "alive-fetch": "^1.0.0"
   }
