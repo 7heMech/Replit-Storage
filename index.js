@@ -13,6 +13,8 @@ const ERRORS = {
 	NOT_OBJECT: new Error('Invalid parameter passed to set method, type must be object.'),
 };
 
+const encode = encodeURIComponent;
+
 class Client {
 	#url;
 
@@ -38,7 +40,7 @@ class Client {
 
 		let value = this.cache[key];
 		if (typeof value === 'undefined') {
-			value = await fetch(`${this.#url}/${encodeURIComponent(key)}`).then(res => res.text());
+			value = await fetch(`${this.#url}/${encode(key)}`).then(res => res.text());
 			this.cache[key] = value;
 		}
 
@@ -52,13 +54,13 @@ class Client {
 	async set(entries) {
 		if (typeof entries !== 'object') throw ERRORS.NOT_OBJECT;
 
-		const body = new URLSearchParams();
+		let query = '?';
 		for (const key in entries) {
 			const value = JSON.stringify(entries[key]);
-
-			this.cache[key] = value;
-			body.append(key, value);
+  		query += `${encode(key)}=${encode(value)}&`;
 		}
+
+		const body = query.slice(0, -1); // removes the trailing &
 
 		await fetch(this.#url, {
 			method: 'POST',
@@ -75,7 +77,7 @@ class Client {
 		if (typeof key !== 'string') throw ERRORS.NOT_STRING;
 
 		delete this.cache[key];
-		await fetch(`${this.#url}/${encodeURIComponent(key)}`, { method: 'DELETE' });
+		await fetch(`${this.#url}/${encode(key)}`, { method: 'DELETE' });
 	}
 
 	/**
@@ -86,12 +88,7 @@ class Client {
 	async list(config = {}) {
 		const { prefix = '' } = config;
 
-		const query = new URLSearchParams({
-			encode: true,
-			prefix,
-		});
-
-		const text = await fetch(`${this.#url}?${query}`).then(res => res.text());
+		const text = await fetch(`${this.#url}?encode=true&prefix=${encode(prefix)}`).then(res => res.text());
 		if (text.length === 0) return [];
 
 		return text.split('\n').map(decodeURIComponent);
