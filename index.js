@@ -58,6 +58,7 @@ class Client {
 		for (const key in entries) {
 			const value = JSON.stringify(entries[key]);
   		query += `${encode(key)}=${encode(value)}&`;
+			this.cache[key] = value;
 		}
 
 		const body = query.slice(0, -1); // removes the trailing &
