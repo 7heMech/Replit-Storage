@@ -1,5 +1,3 @@
-run = "npm run test"
-
 entrypoint = "index.js"
 
 hidden = [".config", "package-lock.json"]

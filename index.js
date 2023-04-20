@@ -2,15 +2,15 @@ const fetch = require("alive-fetch");
 
 const parseJson = (val) => {
 	try {
-		return JSON.parse(val);
+		return JSON.parse(val); 
 	} catch (err) {
 		return val;
 	}
 }
 
 const ERRORS = {
-	NOT_STRING: new Error('The type of a DB key must be string.'),
-	NOT_OBJECT: new Error('Invalid parameter passed to set method, type must be object.'),
+	NOT_OBJECT: new Error('Set method expects an object.'),
+	NOT_STRING: new Error('Get and delete methods expect a string.'),
 };
 
 const encode = encodeURIComponent;
@@ -54,7 +54,7 @@ class Client {
 	async set(entries) {
 		if (typeof entries !== 'object') throw ERRORS.NOT_OBJECT;
 
-		let query = '?';
+		let query = '';
 		for (const key in entries) {
 			const value = JSON.stringify(entries[key]);
   		query += `${encode(key)}=${encode(value)}&`;
@@ -75,7 +75,6 @@ class Client {
 	 */
 	async delete(key) {
 		if (typeof key !== 'string') throw ERRORS.NOT_STRING;
-
 		delete this.cache[key];
 		await fetch(`${this.#url}/${encode(key)}`, { method: 'DELETE' });
 	}
