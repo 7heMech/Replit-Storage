@@ -8,11 +8,6 @@ const parseJson = (val) => {
 	}
 }
 
-const ERRORS = {
-	NOT_OBJECT: new Error('Set method expects an object.'),
-	NOT_STRING: new Error('Get and delete methods expect a string.'),
-};
-
 const encode = encodeURIComponent;
 
 class Client {
@@ -23,19 +18,18 @@ class Client {
 	 * @param {String} url Custom database URL
 	 */
 	constructor(url) {
-		this.#url = new URL(url || process.env.REPLIT_DB_URL);
+		this.#url = new URL(url || process.env.REPLIT_DB_URL).toString();
 		this.cache = {};
 	}
 
 	/**
 	 * Retrieves a value from the cache or the database.
-	 * @param {String} key - The key to retrieve.
+	 * @param {String|Number} key - The key to retrieve.
 	 * @param {Object} [config] - Configuration options.
 	 * @param {Boolean} [config.raw=false] - If true, returns the raw string value instead of parsing it.
 	 * @returns {*} - The value of the key.
 	 */
 	async get(key, config = {}) {
-		if (typeof key !== 'string') throw ERRORS.NOT_STRING;
 		const { raw = false } = config;
 
 		let value = this.cache[key];
@@ -52,7 +46,7 @@ class Client {
 	 * @param {Object} entries An object containing key/value pairs to be set.
 	 */
 	async set(entries) {
-		if (typeof entries !== 'object') throw ERRORS.NOT_OBJECT;
+		if (typeof entries !== 'object') throw Error('Set method expects an object.');
 
 		let query = '';
 		for (const key in entries) {
@@ -72,10 +66,9 @@ class Client {
 
 	/**
 	 * Deletes a key
-	 * @param {String} key Key
+	 * @param {String|Number} key Key
 	 */
 	async delete(key) {
-		if (typeof key !== 'string') throw ERRORS.NOT_STRING;
 		delete this.cache[key];
 		await fetch(`${this.#url}/${encode(key)}`, { method: 'DELETE' });
 	}
@@ -120,7 +113,7 @@ class Client {
 
 	/**
 	 * Delete many entries by keys.
-	 * @param {Array<string>} keys List of keys to delete.
+	 * @param {Array<String|Number>} keys List of keys to delete.
 	 */
 	async deleteMany(keys) {
 		for (let i = 0; i < keys.length; i++)
