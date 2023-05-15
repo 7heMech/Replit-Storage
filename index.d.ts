@@ -25,7 +25,7 @@ declare class Client<T extends Record<string | number, unknown> = Record<string 
 
 	public getAll(): Promise<T>;
 
-	public deleteMany(keys: Array<(keyof T)[]>): Promise<void>;
+	public deleteMany(keys: Array<keyof T>): Promise<void>;
 }
 
 export { Client };

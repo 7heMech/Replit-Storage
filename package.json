@@ -1,6 +1,6 @@
 {
   "name": "replit-storage",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "Client for the Replit Database.",
   "main": "index.js",
   "contributors": [

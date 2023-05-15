@@ -10,10 +10,15 @@ Replit Storage is a simple way to use the Replit Database in your Node.js repls.
 const { Client } = require("replit-storage");
 const client = new Client();
 
-client.set({ key: "value" }).then(async () => {
-	const key = await client.get("key");
-	console.log(key);
+const key = 'str';
+
+await client.set({
+	key, // key: str
+	[key]: key, // str: str
+	other: 'value' // other: value
 });
+
+await client.get('key'); // str
 ```
 
 ## Docs
