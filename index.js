@@ -2,7 +2,7 @@ const fetch = require("alive-fetch");
 
 const parseJson = (val) => {
 	try {
-		return JSON.parse(val); 
+		return JSON.parse(val);
 	} catch (err) {
 		return val;
 	}
@@ -51,7 +51,7 @@ class Client {
 		let query = '';
 		for (const key in entries) {
 			const value = JSON.stringify(entries[key]);
-  		query += `${encode(key)}=${encode(value)}&`;
+			query += `${encode(key)}=${encode(value)}&`;
 			this.cache[key] = value;
 		}
 
@@ -74,7 +74,7 @@ class Client {
 	}
 
 	/**
-	 * List keys starting with a prefix or list all.
+	 * List keys starting with a prefix or list all keys.
 	 * @param {Object} [config] - Configuration options.
 	 * @param {String} [config.prefix=''] Filter keys starting with prefix.
 	 */
