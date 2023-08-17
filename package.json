@@ -1,6 +1,10 @@
 {
   "name": "replit-storage",
+<<<<<<< HEAD
   "version": "2.0.10",
+=======
+  "version": "2.0.8",
+>>>>>>> parent of 12b8479 (Added JSDoc to index.d.ts, updated version)
   "description": "Client for the Replit Database.",
   "main": "index.js",
   "contributors": [
