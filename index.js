@@ -1,4 +1,28 @@
-const fetch = require("alive-fetch");
+{
+const isNode = Object.prototype.toString.call(typeof process !== 'undefined' ? process : 0) === '[object process]';
+
+const Api = (url) => {
+	if (!isNode && !url) throw 'You must pass a db url to the client';
+	const db = new URL(url || process.env.REPLIT_DB_URL).toString();
+
+	return async (options = {}) => {
+		const { body = {}, method = 'GET', prefix, key } = options;
+
+		const params = { body, method, headers: { connection: 'keep-alive' } };
+
+		// setting keys
+		if (body) {
+			params.method = 'POST';
+			params.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+		};
+
+		let path;
+		if (key) path = encodeURIComponent(key); // getting/deleting a key
+		else if (prefix) path = '?encode=true&prefix=' + encodeURIComponent(prefix); // listing keys
+		
+		return fetch(`${db}/${path}`, params);
+	}
+};
 
 const parseJson = (val) => {
 	try {
@@ -8,17 +32,13 @@ const parseJson = (val) => {
 	}
 }
 
-const encode = encodeURIComponent;
-
 class Client {
-	#url;
-
 	/**
 	 * Initiates Class.
 	 * @param {String} url Custom database URL
 	 */
 	constructor(url) {
-		this.#url = new URL(url || process.env.REPLIT_DB_URL).toString();
+		this.fetch = Api(url);
 		this.cache = {};
 	}
 
@@ -34,7 +54,7 @@ class Client {
 
 		let value = this.cache[key];
 		if (typeof value === 'undefined') {
-			value = await fetch(`${this.#url}/${encode(key)}`).then(res => res.text());
+			value = await this.fetch({ key }).then(res => res.text());
 			this.cache[key] = value;
 		}
 
@@ -57,11 +77,7 @@ class Client {
 
 		const body = query.slice(0, -1); // removes the trailing &
 
-		await fetch(this.#url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-			body,
-		});
+		await this.fetch({ body });
 	}
 
 	/**
@@ -70,7 +86,7 @@ class Client {
 	 */
 	async delete(key) {
 		delete this.cache[key];
-		await fetch(`${this.#url}/${encode(key)}`, { method: 'DELETE' });
+		await this.fetch({ key, method: 'DELETE' });
 	}
 
 	/**
@@ -81,7 +97,7 @@ class Client {
 	async list(config = {}) {
 		const { prefix = '' } = config;
 
-		const text = await fetch(`${this.#url}?encode=true&prefix=${encode(prefix)}`).then(res => res.text());
+		const text = await this.fetch({ prefix }).then(res => res.text());
 		if (text.length === 0) return [];
 
 		return text.split('\n').map(decodeURIComponent);
@@ -121,4 +137,6 @@ class Client {
 	}
 }
 
-module.exports = { Client };
+if (isNode) module.exports = { Client };
+else window.Client = Client;
+}

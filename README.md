@@ -3,7 +3,7 @@
 [![Run on Repl.it](https://repl.it/badge/github/7heMech/Replit-Storage)](https://repl.it/github/7heMech/Replit-Storage)
 
 # Replit Storage
-Replit Storage is a simple way to use the Replit Database in your Node.js repls.
+Replit Storage is a simple way to use the Replit Database in your repl or in the browser.
 
 ## Get started
 ```js
