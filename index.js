@@ -8,15 +8,6 @@ const parseJson = (val) => {
 
 const encode = encodeURIComponent;
 
-const req = async (url, params = {}) => {
-	params.headers = Object.assign(
-    {},
-    params.headers,
-    { connection: 'keep-alive' }
-  );
-	return fetch(url, params);
-}
-
 class Client {
 	#url;
 
@@ -41,7 +32,7 @@ class Client {
 
 		let value = this.cache[key];
 		if (typeof value === 'undefined') {
-			value = await req(`${this.#url}/${encode(key)}`).then(res => res.text());
+			value = await fetch(`${this.#url}/${encode(key)}`).then(res => res.text());
 			this.cache[key] = value;
 		}
 
@@ -64,7 +55,7 @@ class Client {
 
 		const body = query.slice(0, -1); // removes the trailing &
 
-		await req(this.#url, {
+		await fetch(this.#url, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			body,
@@ -77,7 +68,7 @@ class Client {
 	 */
 	async delete(key) {
 		delete this.cache[key];
-		await req(`${this.#url}/${encode(key)}`, { method: 'DELETE' });
+		await fetch(`${this.#url}/${encode(key)}`, { method: 'DELETE' });
 	}
 
 	/**
@@ -88,7 +79,7 @@ class Client {
 	async list(config = {}) {
 		const { prefix = '' } = config;
 
-		const text = await req(`${this.#url}?encode=true&prefix=${encode(prefix)}`).then(res => res.text());
+		const text = await fetch(`${this.#url}?encode=true&prefix=${encode(prefix)}`).then(res => res.text());
 		if (text.length === 0) return [];
 
 		return text.split('\n').map(decodeURIComponent);
