@@ -1,9 +1,11 @@
 declare class Client<T extends Record<string | number, any> = Record<string | number, any>> {
-	/**
-	 * Initiates Class.
-	 * @param {String} url Custom database URL
-	 */
-	constructor(url?: string);
+  /**
+   * Initiates Class.
+   * @param {String} url Custom database URL
+   * @param {Boolean} auth For custom databases with identity auth.
+   * @param {String} audience Audience for identity auth.
+   */
+	constructor(url?: string, auth?: boolean, audience?: string);
 
 	/**
 	 * Retrieves a value from the cache or the database.

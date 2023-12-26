@@ -1,6 +1,6 @@
 {
   "name": "replit-storage",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "description": "Client for the Replit Database.",
   "main": "index.js",
   "contributors": [
@@ -13,5 +13,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/7heMech/Replit-Database.git"
+  },
+  "dependencies": {
+    "replit-identity": "^1.2.6"
   }
 }
