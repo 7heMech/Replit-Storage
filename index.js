@@ -16,12 +16,11 @@ class Client {
   /**
    * Initiates Class.
    * @param {String} url Custom database URL
-   * @param {Boolean} auth For custom databases with identity auth.
    * @param {String} audience Audience for identity auth.
    */
-  constructor(url, auth, audience) {
+  constructor(url, audience) {
     this.#url = new URL(url || process.env.REPLIT_DB_URL).toString();
-    this.auth = auth ? create(audience) : null;
+    this.auth = audience ? create(audience) : null;
     this.fetch = async (path, { body, method }) => {
       const options = {
         method: method || body ? 'POST' : 'GET',
