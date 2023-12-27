@@ -65,6 +65,7 @@ class Client {
   async get(key, config = {}) {
     const { raw = false } = config;
 
+    key = transform(key);
     let value = this.cache[key];
     if (typeof value === 'undefined') {
       value = await this.fetch(`/${encode(key)}`);
@@ -100,6 +101,7 @@ class Client {
    * @param {String|Number} key Key
    */
   async delete(key) {
+    key = transform(key);
     delete this.cache[key];
     await this.fetch(`/${encode(key)}`, { method: 'DELETE' });
   }
