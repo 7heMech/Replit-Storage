@@ -20,6 +20,8 @@ class Client {
    */
   constructor(url, audience) {
     this.#url = new URL(url || process.env.REPLIT_DB_URL).toString();
+    if (this.#url.endsWith('/')) this.#url = this.#url.slice(0, -1);
+
     this.auth = audience ? create(audience) : null;
     this.fetch = async (path, { body, method } = {}) => {
       const options = {
@@ -34,6 +36,7 @@ class Client {
       const res = await fetch(`${this.#url}${path}`, options);
       if (options.method === 'GET') return res.text();
     }
+
     this.cache = {};
   }
 
