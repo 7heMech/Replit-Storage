@@ -10,6 +10,21 @@ const parseJson = (val) => {
 
 const encode = encodeURIComponent;
 
+const transform = (str) => {
+  const starts = str.startsWith('/');
+  const includes = str.includes('//');
+
+  if (!starts && !includes) return str;
+
+  let key = str;
+  if (includes) key = key.replace(/(\/)\1+/g, () => '/');
+  if (starts) key = key.slice(1);
+
+  console.info(`\x1B[31mWarning:\x1B[0m Keys cannot start with the / symbol or have it repeated.\nTransformed key: \x1B[33m${str}\x1B[0m => \x1B[32m${key}\x1B[0m\n`);
+
+  return key;
+}
+
 class Client {
   #url;
 
@@ -25,7 +40,7 @@ class Client {
     this.auth = audience ? create(audience) : null;
     this.fetch = async (path, { body, method } = {}) => {
       const options = {
-        method: method || body ? 'POST' : 'GET',
+        method: method || (body ? 'POST' : 'GET'),
         headers: {
           authorization: this.auth,
           'Content-Type': body ? 'application/x-www-form-urlencoded' : 'application/json',
@@ -67,8 +82,10 @@ class Client {
     if (typeof entries !== 'object') throw Error('Set method expects an object.');
 
     let query = '';
-    for (const key in entries) {
-      const value = JSON.stringify(entries[key]);
+    for (const str in entries) {
+      const value = JSON.stringify(entries[str]);
+
+      const key = transform(str);
       query += `${encode(key)}=${encode(value)}&`;
       this.cache[key] = value;
     }
