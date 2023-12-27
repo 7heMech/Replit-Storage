@@ -31,7 +31,7 @@ class Client {
         body
       };
 
-      const res = fetch(`${this.#url}${path}`, options);
+      const res = await fetch(`${this.#url}${path}`, options);
       if (options.method === 'GET') return res.text();
     }
     this.cache = {};
