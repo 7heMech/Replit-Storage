@@ -21,7 +21,7 @@ class Client {
   constructor(url, audience) {
     this.#url = new URL(url || process.env.REPLIT_DB_URL).toString();
     this.auth = audience ? create(audience) : null;
-    this.fetch = async (path, { body, method }) => {
+    this.fetch = async (path, { body, method } = {}) => {
       const options = {
         method: method || body ? 'POST' : 'GET',
         headers: {
