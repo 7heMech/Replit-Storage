@@ -20,7 +20,9 @@ const transform = (str) => {
   if (includes) key = key.replace(/(\/)\1+/g, () => '/');
   if (starts) key = key.slice(1);
 
-  console.info(`\x1B[31mWarning:\x1B[0m Keys cannot start with the / symbol or have it repeated.\nTransformed key: \x1B[33m${str}\x1B[0m => \x1B[32m${key}\x1B[0m\n`);
+  console.info(`\x1B[31mWarning:\x1B[0m Keys cannot start with the / symbol or have it repeated.\nTransformed key: "\x1B[33m${str}\x1B[0m" => "\x1B[32m${key}\x1B[0m"\n`);
+
+  if (key === '') throw new Error('Cannot set an empty key.');
 
   return key;
 }
